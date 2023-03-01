@@ -1,0 +1,82 @@
+---
+output: html_document
+---
+
+
+# CS 70 Fall 2022
+## Note 10
+### By Mihir Mirchandani
+
+---
+
+
+### Counting
+
+The next major topic of this course is Probability Theory. But before learning that, you must learn counting. That is the subject of this note.
+
+### 1 Counting Sequences
+Let's start with a simple scenario. <br>
+We pick k items in a set {1, 2, ..., n} taking one at a time, sampling without replacement. This means whenever we take something out of the set, the size of the set decreases by 1. <br>
+If we were dealing with a set of cards (52), then the first time we take out of the set there are 52 possibilities to choose from and the second time there are 51 times to choose from. This is an example of the first rule of counting...
+
+> **First Rule of Counting**: If an object can be made by a succession of k choices, where there are n<sub>1</sub> ways
+of making the first choice, and for every way of making the first choice there are n<sub>2</sub> ways of making the
+second choice, and for every way of making the first and second choice there are n<sub>3</sub> ways of making the
+third choice, and so on up to the n<sub>k</sub> choice, then the total number of distinct objects that can be made in
+this way is the product n<sub>1</sub> ×n<sub>2</sub> ×n<sub>3</sub> ×··· ×n<sub>k</sub>.
+
+### 2 Counting Sets
+Let's consider a slightly different problem. We would like to sample without replacement, but this time we do not care about the order in which we pick the k elements. For example, picking an Ace and then a Jack is equivalent to picking a Jack and then an Ace. This means that if we were to select 5 cards from a deck of 52 cards and we **care** about the order we will have 52 * 51 * 50 * 49 * 48 or 51! / 47! permutations of choosing 5 cards. But if we do not care about the order in our sampling then, we are eliminating all subsets of 5 cards that may repeat in any order which there are 5! of. <br>s
+
+Let's think about this problem with a different approach. Let's think about these as bins corresponding to each 5 element subset. One bin is (1, 2, 3, 4, 5). Another bin is (5, 4, 3, 2, 1). There are exactly 5! such bins.
+
+n choose k is also known as a binomial coefficient and can be written as n! / k!(n - k)!  Equivalently, it’s the number of ways of choosing k objects out of a total of n distinct objects, where the order of the choices does not matter.
+
+> **Second Rule of Counting**:  Assume an object is made by a succession of choices, and the order in which
+the choices are made does not matter. Let A be the set of ordered objects and let B be the set of unordered
+objects. If there exists an m-to-1 function f from A to B, we can count the number of ordered objects
+(pretending that the order matters) and divide by m (the number of ordered objects per unordered objects) to obtain |B|, the number of unordered objects.
+
+### 3 Sampling with replacement
+
+Sometimes we wish to see what would happen when we pick something out of a set, S = {1, 2, ..., n} and then put it back into the set. This is called sampling with replacement. Assume we are still picking k elements out of a set of n elements and that order matters. This creates n<sup>k</sup> sequences. Multiple trials can have the same outcome.
+
+### 3.1 Coin Tosses
+
+How many different ways are there if we flip k times? From the first rule of counting, we can see the answer must be $2^k$ possibilities.
+
+### 3.2 Rolling Dice
+
+Let's say we roll two dice. This means we are still sampling with replacement. We have 6 possibilities on the first roll and we still have 6 possibilities on the second roll giving us a total of 36 possibilities.
+
+### Sampling With Replacement, but where Order does not matter.
+
+Say you have unlimited quantities of apples, bananas, and oranges. You want to select 5 pieces of fruit to make a fruit salad. How many ways are there to do this? In this example, S = {1, 2, 3}. where 1 represents apples, 2 represents bananas, and 3 represents oranges. k = 5 since we wish to select 5 pieces of fruit. Ordering does not matter meaning selecting an apple followed by a banana will lead to the same salad as a banana followed by an apple.
+
+If we only follow the Second rule of counting, we achieve $3^5$ potential options because there are 3 types of fruit and we can choose 5 fruits. However we are overcounting. 4 bananas and 1 apple is counted 5 times in this scenario, but should only be counted once.
+
+We can actually model this in terms of binary strings. Let's first generalize this case. We start with an S = {1, 2, ..., n}. We would like to know how to choose multisets (sets with repetition) of size k. To model this under binary strings, we can assume there is one bin for each element of S. This means that there are n bins. For example, if we selected 2 apples and 1 banana, bin 1 would have 2 elements and bin 2 would have 1 element. In order to count the number of multisets, we need to count how many different ways there are to fill these bins with k elements. We
+don’t care about the order of the bins themselves, just how many of the k elements each bin contains. Let’s represent each of the k elements by a 0 in the binary string, and separations between bins by a 1.
+
+There should always be n - 1 dividors (1s) and k balls (0s). This makes k + n - 1 locations to potentially account for. We are choosing out of these k + n - 1, k locations for our balls to be placed. Another way to think about this is that we are choosing n - 1 places to put our dividors. In either case, we can quickly see how this is equivalent to: 
+$$ \frac {(n + k - 1)!}{(n)! (k - 1)!} $$
+
+So to answer our question of 3 types of fruits and 5 choots to arrange for our fruit salad, we can come up with $n + k - 1 \choose k$ or $3 + 5 - 1 \choose 5$ or $7 \choose 5$ or 21.
+
+> **Zeroth Rule of Counting:** If a set A can be placed into a one-to-one correspondence with a set B (i.e. you
+can find a bijection between the two — an invertible pair of maps that map elements of A to elements of B
+and vice-versa), then |A| = |B|.
+This is the very heart of what it means to count and is key to many combinatorial arguments as we will
+explore further in the next section.
+
+### 4 Combinatorial Proofs
+
+These are often denoted as proofs by stories. Let's start by proving the Binomial Theorem. This is an important theorem.
+
+For all $n ∈ ℕ, (a + b)^n = \sum_{i = 0}^{n} {n \choose k} a^k b^{n - k}$
+
+Proof: The LHS can be rewritten as $(a + b)(a + b)(a + b)...(a + b)$ n times. However this simply means that there are $2^n$ monomials. Let's take n = 2 for example. 
+
+$(a + b)(a + b) = a^2 + ab + ba + b^2$. In general, each monomial can be represented as $a^k b^{n - k}$. And we can sum over each term from k = 0 to n to account for every term. However we must also remember that there are $n \choose k$ ways to choose k copies of a's and n - k copies of b's from each (a + b) factor.   
+
+
